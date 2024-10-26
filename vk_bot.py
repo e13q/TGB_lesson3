@@ -32,14 +32,14 @@ if __name__ == "__main__":
     os.environ['DIALOGFLOW_PROJECT_ID'] = env.str('DIALOGFLOW_PROJECT_ID')
     vk_session = vk.VkApi(token=env.str('VK_GROUP_TOKEN'))
     setup_logger(
-        env.str('TELEGRAM_LOGGER_BOT_TOKEN'),
+        env.str('TELEGRAM_LOGGER_BOT_TOKEN_VK'),
         env.str('TELEGRAM_CHAT_ID')
     )
-    logging.info('Бот для группы VK успешно запущен!')
     while (True):
         try:
             vk_api = vk_session.get_api()
             longpoll = VkLongPoll(vk_session)
+            logging.info('Бот для группы VK успешно запущен!')
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                     echo(event, vk_api)

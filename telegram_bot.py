@@ -27,9 +27,8 @@ if __name__ == "__main__":
     os.environ['DIALOGFLOW_PROJECT_ID'] = env.str('DIALOGFLOW_PROJECT_ID')
     main_bot_token = env.str('TELEGRAM_MAIN_BOT_TOKEN')
     setup_logger(
-        env.str('TELEGRAM_LOGGER_BOT_TOKEN'),
+        env.str('TELEGRAM_LOGGER_BOT_TOKEN_TG'),
         env.str('TELEGRAM_CHAT_ID'))
-    logging.info('Бот Telegram успешно запущен!')
     while (True):
         try:
             updater = Updater(main_bot_token)
@@ -37,16 +36,10 @@ if __name__ == "__main__":
             dispatcher.add_handler(
                 MessageHandler(Filters.text & ~Filters.command, echo)
             )
+            logging.info('Бот Telegram успешно запущен!')
             updater.start_polling()
             updater.idle()
         except Exception as e:
             exception_out(
                 'Шеф, у нас неожиданная ошибка: ', e
             )
-
-
-
-
-
-
-
