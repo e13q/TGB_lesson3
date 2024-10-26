@@ -78,6 +78,6 @@ if __name__ == '__main__':
     elif path:
         intents = load_json(path)
     else:
-        print('Specify path to data file using one of arguments: --url, --path')
+        print('Specify path to data file using one of arguments: --url, --path') # noqa
         exit()
     load_intents(intents, dataflow_project_id)
