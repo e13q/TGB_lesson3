@@ -17,4 +17,4 @@ def analyse_message(message, unique_id):
     response = session_client.detect_intent(
         request={"session": session, "query_input": query_input}
     )
-    return response.query_result.fulfillment_text
+    return response
