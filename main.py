@@ -3,6 +3,7 @@ import os
 from environs import Env
 
 from telegram_bot import bot_start
+from vk_bot import pooling_start
 
 
 if __name__ == "__main__":
@@ -12,4 +13,5 @@ if __name__ == "__main__":
         'GOOGLE_APPLICATION_CREDENTIALS'
     )
     os.environ['DIALOGFLOW_PROJECT_ID'] = env.str('DIALOGFLOW_PROJECT_ID')
-    bot_start(env.str('TELEGRAM_MAIN_BOT_TOKEN'))
+    pooling_start(env.str('VK_GROUP_TOKEN'))
+    # bot_start(env.str('TELEGRAM_MAIN_BOT_TOKEN'))
