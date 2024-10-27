@@ -111,10 +111,14 @@ python3 vk_bot.py
 
 ![telegram](https://github.com/user-attachments/assets/cdd205b8-6fb4-4d41-92fa-c1120c27520b)
 
+[Ссылка на рабочую версию](https://t.me/UronshaBot)
+
 ### VK
 
 ![vk](https://github.com/user-attachments/assets/16346269-7a1b-425b-878d-cdd788354475)
 
+[Ссылка на группу](https://vk.com/club228001877)
+[Ссылка на диалог](https://vk.com/im?sel=-228001877)
 
 ## Цель проекта
 
