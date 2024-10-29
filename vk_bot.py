@@ -10,9 +10,9 @@ from analysis_by_dialogflow import analyse_message
 from bot_logging import setup_logger, exception_out
 
 
-def echo(event, vk_api):
+def echo(event, vk_api, project_id):
     analyse_response = analyse_message(
-        event.text, event.user_id
+        event.text, event.user_id, project_id
     )
     if analyse_response.query_result.intent.is_fallback:
         return None
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = env.str(
         'GOOGLE_APPLICATION_CREDENTIALS'
     )
-    os.environ['DIALOGFLOW_PROJECT_ID'] = env.str('DIALOGFLOW_PROJECT_ID')
+    project_id = env.str('DIALOGFLOW_PROJECT_ID')
     vk_session = vk.VkApi(token=env.str('VK_GROUP_TOKEN'))
     setup_logger(
         env.str('TELEGRAM_LOGGER_BOT_TOKEN_VK'),
@@ -42,7 +42,7 @@ if __name__ == "__main__":
             logging.info('Бот для группы VK успешно запущен!')
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                    echo(event, vk_api)
+                    echo(event, vk_api, project_id)
         except Exception as e:
             exception_out(
                 'Шеф, у нас неожиданная ошибка: ', e

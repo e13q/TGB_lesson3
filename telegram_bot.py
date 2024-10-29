@@ -9,9 +9,9 @@ from analysis_by_dialogflow import analyse_message
 from bot_logging import setup_logger, exception_out
 
 
-def echo(update: Update, context: CallbackContext) -> None:
+def echo(update: Update, context: CallbackContext, project_id) -> None:
     analyse_response = analyse_message(
-        update.message.text, update.message.chat_id
+        update.message.text, update.message.chat_id, project_id
     )
     update.message.reply_text(
         analyse_response.query_result.fulfillment_text
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = env.str(
         'GOOGLE_APPLICATION_CREDENTIALS'
     )
-    os.environ['DIALOGFLOW_PROJECT_ID'] = env.str('DIALOGFLOW_PROJECT_ID')
+    project_id = env.str('DIALOGFLOW_PROJECT_ID')
     main_bot_token = env.str('TELEGRAM_MAIN_BOT_TOKEN')
     setup_logger(
         env.str('TELEGRAM_LOGGER_BOT_TOKEN_TG'),
@@ -34,7 +34,10 @@ if __name__ == "__main__":
             updater = Updater(main_bot_token)
             dispatcher = updater.dispatcher
             dispatcher.add_handler(
-                MessageHandler(Filters.text & ~Filters.command, echo)
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    echo(project_id=project_id)
+                )
             )
             logging.info('Бот Telegram успешно запущен!')
             updater.start_polling()
