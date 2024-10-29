@@ -1,5 +1,6 @@
 import os
 import logging
+from functools import partial
 
 from environs import Env
 from telegram import Update
@@ -33,10 +34,11 @@ if __name__ == "__main__":
         try:
             updater = Updater(main_bot_token)
             dispatcher = updater.dispatcher
+            echo_with_project_id = partial(echo, project_id=project_id)
             dispatcher.add_handler(
                 MessageHandler(
                     Filters.text & ~Filters.command,
-                    echo(project_id=project_id)
+                    echo_with_project_id
                 )
             )
             logging.info('Бот Telegram успешно запущен!')
