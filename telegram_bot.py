@@ -6,13 +6,13 @@ from environs import Env
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
 
-from request_dialogflow import request_to_dialogflow
+from working_with_dialogflow import request_to_dialogflow
 from bot_logging import setup_logger, exception_out
 
 
 def echo(update: Update, context: CallbackContext, project_id) -> None:
     analyse_response = request_to_dialogflow(
-        update.message.text, update.message.chat_id, project_id
+        update.message.text, f'tg-{update.message.chat_id}', project_id
     )
     update.message.reply_text(
         analyse_response.query_result.fulfillment_text
