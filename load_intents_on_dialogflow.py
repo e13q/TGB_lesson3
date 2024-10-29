@@ -1,14 +1,14 @@
-import os
 import argparse
 import json
 
 import requests
 from environs import Env
 from google.cloud import dialogflow
+from google.oauth2 import service_account
 
 
-def load_intents(intents: list, dataflow_project_id):
-    intents_client = dialogflow.IntentsClient()
+def load_intents(intents: list, credentials, dataflow_project_id):
+    intents_client = dialogflow.IntentsClient(credentials=credentials)
     parent = dialogflow.AgentsClient.agent_path(
        dataflow_project_id
     )
@@ -56,8 +56,8 @@ if __name__ == '__main__':
     url = parser.url
     env = Env()
     env.read_env()
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = env.str(
-        "GOOGLE_APPLICATION_CREDENTIALS"
+    credentials = service_account.Credentials.from_service_account_file(
+        env.str('GOOGLE_APPLICATION_CREDENTIALS')
     )
     dataflow_project_id = env.str('DIALOGFLOW_PROJECT_ID')
     intents = None
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         elif path:
             with open(path, "r", encoding="utf-8") as file:
                 intents = json.load(file)
-        load_intents(intents, dataflow_project_id)
+        load_intents(intents, credentials, dataflow_project_id)
         print("Intents created")
     else:
         print('Specify path to data file using one of arguments: --url, --path') # noqa

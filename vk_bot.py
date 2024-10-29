@@ -1,18 +1,21 @@
 import random
-import os
 import logging
 
 from environs import Env
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
+from google.oauth2 import service_account
 
 from working_with_dialogflow import request_to_dialogflow
 from bot_logging import setup_logger, exception_out
 
 
-def echo(event, vk_api, project_id):
+def echo(event, vk_api, credentials, project_id):
     analyse_response = request_to_dialogflow(
-        event.text, f'vk-{event.user_id}', project_id
+        event.text,
+        f'vk-{event.user_id}',
+        credentials,
+        project_id
     )
     if analyse_response.query_result.intent.is_fallback:
         return None
@@ -26,8 +29,8 @@ def echo(event, vk_api, project_id):
 if __name__ == "__main__":
     env = Env()
     env.read_env()
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = env.str(
-        'GOOGLE_APPLICATION_CREDENTIALS'
+    credentials = service_account.Credentials.from_service_account_file(
+        env.str('GOOGLE_APPLICATION_CREDENTIALS')
     )
     project_id = env.str('DIALOGFLOW_PROJECT_ID')
     vk_session = vk.VkApi(token=env.str('VK_GROUP_TOKEN'))
@@ -42,7 +45,7 @@ if __name__ == "__main__":
             logging.info('Бот для группы VK успешно запущен!')
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                    echo(event, vk_api, project_id)
+                    echo(event, vk_api, credentials, project_id)
         except Exception as e:
             exception_out(
                 'Шеф, у нас неожиданная ошибка: ', e
