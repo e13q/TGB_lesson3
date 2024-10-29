@@ -6,12 +6,12 @@ from environs import Env
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-from analysis_by_dialogflow import analyse_message
+from request_dialogflow import request_to_dialogflow
 from bot_logging import setup_logger, exception_out
 
 
 def echo(event, vk_api, project_id):
-    analyse_response = analyse_message(
+    analyse_response = request_to_dialogflow(
         event.text, event.user_id, project_id
     )
     if analyse_response.query_result.intent.is_fallback:

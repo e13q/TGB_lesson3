@@ -1,7 +1,7 @@
 from google.cloud import dialogflow
 
 
-def analyse_message(message, unique_id, project_id):
+def request_to_dialogflow(message, unique_id, project_id):
     session_client = dialogflow.SessionsClient()
     session = session_client.session_path(
         project_id,
